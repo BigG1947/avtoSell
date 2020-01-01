@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>AvtoSell - главная</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/static/css/mdb.css">
+    <link rel="stylesheet" href="/static/css/nouislider.css">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+<header>
+    <nav class="mb-0 navbar navbar-expand-lg navbar-dark elegant-color">
+        <a class="navbar-brand" href="/">AvtoSell</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+                aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/catalog">Каталог</a><span class="sr-only">(current)</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">Новости</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                         aria-labelledby="navbarDropdownMenuLink-333">
+                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                        <hr class="hr">
+                        <a class="dropdown-item" href="/login">Войти</a>
+                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main class="my-5">
+
+    <div class="container-fluid">
+
+        <div class="row justify-content-between">
+
+            <section class="col-12 col-lg-2">
+                <div class="row justify-content-center">
+                    <button class="btn btn-outline-elegant w-100 d-sm-block d-lg-none" id="barToggle"
+                            data-toggle="collapse" data-target="#collapseBar"
+                            aria-expanded="false" aria-controls="collapseBar">
+                        фильтры
+                    </button>
+                </div>
+
+                <div class="collapse d-lg-block m-auto ml-lg-4" id="collapseBar">
+                    <form action="">
+                        <div class="my-4">
+                            <p class="font-weight-bold">Бренд:</p>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="brand" value="5" class="custom-control-input" id="brand5">
+                                <label class="custom-control-label" for="brand5">HONDA</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="brand" value="4" class="custom-control-input" id="brand4">
+                                <label class="custom-control-label" for="brand4">FERRARI</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="brand" value="3" class="custom-control-input" id="brand3">
+                                <label class="custom-control-label" for="brand3">MERCEDES</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="brand" value="2" class="custom-control-input" id="brand2">
+                                <label class="custom-control-label" for="brand2">TOYOTA</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="brand" value="1" class="custom-control-input" id="brand1">
+                                <label class="custom-control-label" for="brand1">BMW</label>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <p class="font-weight-bold">Цвет:</p>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="color" value="5" class="custom-control-input" id="color5">
+                                <label class="custom-control-label" for="color5">Белый</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="color" value="4" class="custom-control-input" id="color4">
+                                <label class="custom-control-label" for="color4">Красный</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="color" value="3" class="custom-control-input" id="color3">
+                                <label class="custom-control-label" for="color3">Желтый</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="color" value="2" class="custom-control-input" id="color2">
+                                <label class="custom-control-label" for="color2">Черный</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="color" value="1" class="custom-control-input" id="color1">
+                                <label class="custom-control-label" for="color1">Бежевый</label>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <p class="font-weight-bold">Год выпуска:</p>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="year" value="5" class="custom-control-input" id="year5">
+                                <label class="custom-control-label" for="year5">2017</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="year" value="4" class="custom-control-input" id="year4">
+                                <label class="custom-control-label" for="year4">2018</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="year" value="3" class="custom-control-input" id="year3">
+                                <label class="custom-control-label" for="year3">2019</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="year" value="2" class="custom-control-input" id="year2">
+                                <label class="custom-control-label" for="year2">2015</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="year" value="1" class="custom-control-input" id="year1">
+                                <label class="custom-control-label" for="year1">2013</label>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <p class="font-weight-bold">Цена:</p>
+                            <div id="slider" class="my-3"></div>
+                            <div class="md-form">
+                                <input type="number" class="form-control my-2" value="0" id="price-min" name="price-min" min="0">
+                                <label for="price-min" class="label">От</label>
+                            </div>
+                            <div class="md-form">
+                                <input type="number" class="form-control my-2" value="100" id="price-max" name="price-max" max="100">
+                                <label for="price-max" class="label">До</label>
+                            </div>
+                        </div>
+
+                        <div class="row my-3">
+                            <button class="btn btn-outline-elegant col-auto font-small" type="submit">применить</button>
+                            <button class="btn btn-outline-elegant col-auto font-small" type="reset">сбросить</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+
+            <section class="col-12 col-lg-9">
+                <!-- Grid row -->
+                <div class="row my-3">
+                    {{ range $val := .repeat }}
+                        <!-- Grid column -->
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <!-- Card -->
+                            <div class="card card-cascade wider card-ecommerce">
+                                <!-- Card image -->
+                                <div class="view view-cascade overlay">
+                                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/img (55).jpg"
+                                         class="card-img-top"
+                                         alt="sample photo">
+                                    <a href="/product/1">
+                                        <div class="mask rgba-white-slight"></div>
+                                    </a>
+                                </div>
+                                <!-- Card image -->
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center pb-0">
+                                    <!-- Title -->
+                                    <h5 class="card-title">
+                                        <strong>
+                                            <a href="/product/1" class="text-dark">GoPro</a>
+                                        </strong>
+                                    </h5>
+                                    <!-- Description -->
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing minima
+                                        veniam
+                                        elit.</p>
+                                    <!-- Card footer -->
+                                    <div class="card-footer mt-4">
+                                        <p class="float-left font-weight-bold mb-1 pb-2">1439$</p>
+                                        <a class="float-right">
+                                            <span class="badge elegant-color mr-1">2017</span>
+                                        </a>
+                                        <a class="float-right">
+                                            <span class="badge elegant-color mr-1">BMW</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- Card content -->
+                            </div>
+                            <!-- Card -->
+                        </div>
+                        <!-- Grid column -->
+                    {{ end }}
+
+                </div>
+                <!-- Grid row -->
+
+            </section>
+        </div>
+
+
+        <section class="row justify-content-center mt-5">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pg-dark">
+                    <li class="page-item ">
+                        <a class="page-link" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link">1</a></li>
+                    <li class="page-item active">
+                        <a class="page-link">2 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item ">
+                        <a class="page-link">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </section>
+
+    </div>
+</main>
+
+
+<footer class="page-footer font-small elegant-color">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> Avtosell.com</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/static/js/popper.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/static/js/mdb.js"></script>
+<!-- Your custom scripts (optional) -->
+<script type="text/javascript" src="/static/js/range-sliders/nouislider.js"></script>
+<script>
+    var slider = document.getElementById('slider');
+
+    noUiSlider.create(slider, {
+        start: [20, 80],
+        connect: true,
+        range: {
+            'min': 0,
+            'max': 100
+        },
+        step: 1,
+    });
+
+
+    var minPriceInputNumber = document.getElementById('price-min');
+
+    minPriceInputNumber.addEventListener('change', function () {
+        slider.noUiSlider.set([this.value, null]);
+    });
+
+    var maxPriceInputNumber = document.getElementById('price-max');
+
+    maxPriceInputNumber.addEventListener('change', function () {
+        slider.noUiSlider.set([null, this.value]);
+    });
+
+    slider.noUiSlider.on('update', function (values, handle) {
+
+        var value = values[handle];
+
+        if (handle) {
+            maxPriceInputNumber.value = value;
+        } else {
+            minPriceInputNumber.value = value;
+        }
+    });
+
+</script>
+
+</body>
+</html>

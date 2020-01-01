@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>AvtoSell - главная</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/static/css/mdb.css">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+<!-- Modal -->
+<div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Выберите день</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="order-form" class="form-inline">
+                    <div class="md-form">
+                        <input id="order-date-input" name="order-data" required type="date" list="order-date-list">
+                        <label for="order-date-input">Дата</label>
+                        <datalist id="order-date-list">
+                        </datalist>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">отмена
+                </button>
+                <button type="submit" form="order-form" class="btn btn-outline-elegant">выбрать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header>
+    <nav class="mb-0 navbar navbar-expand-lg navbar-dark elegant-color">
+        <a class="navbar-brand" href="/">AvtoSell</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+                aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/catalog">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">Новости</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                         aria-labelledby="navbarDropdownMenuLink-333">
+                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                        <hr class="hr">
+                        <a class="dropdown-item" href="/login">Войти</a>
+                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+        <div class="row wow fadeIn">
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid"
+                     alt="">
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+                <!--Content-->
+                <div class="p-4">
+                    <p class="lead font-weight-bold">Name</p>
+                    <div class="mb-3">
+                        <a href="">
+                            <span class="badge elegant-color mr-1">Category 2</span>
+                        </a>
+                        <a href="">
+                            <span class="badge red mr-1">New</span>
+                        </a>
+                    </div>
+
+                    <p class="lead">
+                        <span class="mr-1">$200</span>
+                    </p>
+                    <p class="lead font-weight-bold">Описание</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia
+                        ipsa
+                        sint voluptatibus!
+                        Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
+                    <div class="d-flex justify-content-left">
+
+                        <button type="button" class="btn btn-outline-elegant btn-md my-0 p" data-toggle="modal"
+                                data-target="#basicExampleModal">
+                            забронировать смотр
+                        </button>
+                    </div>
+                </div>
+                <!--Content-->
+            </div>
+            <!--Grid column-->
+        </div>
+
+        <hr>
+
+        <div class="row d-flex justify-content-center">
+            <!--Grid column-->
+            <div class="col-md-6 text-center">
+                <h4 class="my-4 h4">Дополнительная информация</h4>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta
+                    odit
+                    voluptates,
+                    quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+            </div>
+            <!--Grid column-->
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-4 col-md-12 mb-4">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid"
+                     alt="">
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid"
+                     alt="">
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid"
+                     alt="">
+            </div>
+
+        </div>
+
+    </div>
+</main>
+<!--Main layout-->
+
+
+<footer class="page-footer font-small elegant-color">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> Avtosell.com</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/static/js/popper.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/static/js/mdb.js"></script>
+<!-- Your custom scripts (optional) -->
+
+<script>
+    new WOW().init();
+
+    const dateInput = document.querySelector('#order-date-input');
+    const currentDate = new Date();
+    const maxDate = new Date();
+
+    const localDayNames = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'субота'];
+
+    function fillOrderDateList(){
+        let dateList = document.querySelector('#order-date-list');
+        let tmpDate = new Date();
+        let options = '';
+        for (let i = 0; i < 14; i++){
+            if (tmpDate.getDay() !== 0) {
+                options += `<option label="${localDayNames[tmpDate.getDay()]}">${tmpDate.toISOString().substr(0,10)}</option>`;
+            }
+            tmpDate.setDate(tmpDate.getDate() + 1);
+        }
+        dateList.innerHTML = options;
+    }
+
+    maxDate.setDate(currentDate.getDate() + 14);
+    console.log(currentDate.toISOString().substr(0,10));
+    dateInput.setAttribute("min", currentDate.toISOString().substr(0,10));
+    dateInput.setAttribute("max", maxDate.toISOString().substr(0,10));
+    function noSunday(e){
+        var day = new Date( e.target.value ).getUTCDay();
+        // Days in JS range from 0-6 where 0 is Sunday and 6 is Saturday
+        if( day === 0 ){
+            e.target.setCustomValidity('Воскресенье - выходной день. Выберите пожалуйста другой день!');
+        } else {
+            e.target.setCustomValidity('');
+        }
+    }
+    dateInput.addEventListener('input', noSunday);
+    fillOrderDateList();
+</script>
+
+</body>
+</html>

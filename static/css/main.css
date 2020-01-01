@@ -1,0 +1,19 @@
+.card-body {
+    border-bottom-left-radius: inherit !important;
+    border-bottom-right-radius: inherit !important;
+}
+
+.card-footer{
+    background-color: transparent !important;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    height: 100px;
+    width: 100px;
+    outline: black;
+    background-size: 100%, 100%;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-image: none;
+}

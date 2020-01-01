@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>AvtoSell - главная</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/static/css/mdb.css">
+    <link rel="stylesheet" href="/static/css/nouislider.css">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+<header>
+    <nav class="mb-0 navbar navbar-expand-lg navbar-dark elegant-color">
+        <a class="navbar-brand" href="/">AvtoSell</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+                aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/catalog">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">Новости</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                         aria-labelledby="navbarDropdownMenuLink-333">
+                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                        <hr class="hr">
+                        <a class="dropdown-item" href="/login">Войти</a>
+                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main class="my-5" style="min-height: 100vh;">
+
+    <form class="text-center container border border-light p-5" id="registrationForm" action="" method="post" novalidate>
+
+        <p class="h4 mb-4">Регистрация</p>
+
+        <div class="form-row mb-4">
+            <div class="col">
+                <input type="text" required name="first_name" id="defaultRegisterFormFirstName" class="form-control"
+                       placeholder="Имя">
+                <div class="invalid-feedback">Обязательное поле</div>
+            </div>
+            <div class="col">
+                <input type="text" required name="last_name" id="defaultRegisterFormLastName" class="form-control"
+                       placeholder="Фамилия">
+                <div class="invalid-feedback">Обязательное поле</div>
+            </div>
+        </div>
+
+        <!-- E-mail -->
+        <div>
+            <input type="email" required id="emailInput" class="form-control mb-4" name="email" placeholder="E-mail">
+            <div class="invalid-feedback">Данная почта уже используется</div>
+        </div>
+        <div>
+            <input type="text" required id="loginInput" name="login" class="form-control mb-4" placeholder="Логин">
+            <div class="invalid-feedback">Данный логин уже занят</div>
+        </div>
+
+        <!-- Password -->
+        <input type="password" required id="defaultRegisterFormPassword" class="form-control" name="password"
+               placeholder="Пароль" aria-describedby="defaultRegisterFormPasswordHelpBlock">
+        <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+            Рекомендуемая длина минимум 8 символов с спец. символами.
+        </small>
+
+        <!-- Phone number -->
+        <div>
+            <input type="text" required id="phoneInput" name="phone" class="form-control" placeholder="Номер телефона"
+                   aria-describedby="defaultRegisterFormPhoneHelpBlock">
+            <div class="invalid-feedback">Данный телефон уже используется</div>
+        </div>
+
+
+        <button class="btn btn-outline-elegant my-4 btn-block" type="submit">Зарегистрироваться</button>
+
+        <hr>
+
+    </form>
+    <!-- Default form register -->
+</main>
+
+
+<footer class="page-footer font-small elegant-color">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> Avtosell.com</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/static/js/popper.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/static/js/mdb.js"></script>
+<!-- Your custom scripts (optional) -->
+<script type="text/javascript" src="/static/js/range-sliders/nouislider.js"></script>
+
+<script>
+    var phoneInput = document.querySelector("#phoneInput");
+
+    phoneInput.addEventListener("change", function (e) {
+        var xhr = new XMLHttpRequest();
+        var body = phoneInput.value;
+        xhr.open("POST", '/api/checkPhone', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.responseType = "json";
+        xhr.onload = function () {
+            if (xhr.status != 200) {
+                alert('Произошла ошибка, пожалуйста попробуйте позже');
+                console.log(xhr)
+            } else {
+                if (xhr.response.ok === "false") {
+                    phoneInput.setCustomValidity("Данный логин уже занят!");
+                } else {
+                    phoneInput.setCustomValidity('');
+                }
+            }
+        };
+        xhr.send(body);
+    });
+
+    var emailInput = document.querySelector("#emailInput");
+    emailInput.addEventListener("change", function (e) {
+        var xhr = new XMLHttpRequest();
+        var body = emailInput.value;
+        xhr.open("POST", '/api/checkEmail', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.responseType = "json";
+        xhr.onload = function () {
+            if (xhr.status != 200) {
+                alert('Произошла ошибка, пожалуйста попробуйте позже');
+                console.log(xhr)
+            } else {
+                if (xhr.response.ok === "false") {
+                    emailInput.setCustomValidity("Данный логин уже занят!");
+                } else {
+                    emailInput.setCustomValidity('');
+                }
+            }
+        };
+        xhr.send(body);
+    });
+
+    var loginInput = document.querySelector("#loginInput");
+
+    function checkLogin(e) {
+        var xhr = new XMLHttpRequest();
+        var body = loginInput.value;
+        xhr.open("POST", '/api/checkLogin', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.responseType = "json";
+        xhr.onload = function () {
+            if (xhr.status != 200) {
+                alert('Произошла ошибка, пожалуйста попробуйте позже');
+                console.log(xhr)
+            } else {
+                if (xhr.response.ok === "false") {
+                    loginInput.setCustomValidity("Данный логин уже занят!");
+                } else {
+                    loginInput.setCustomValidity('');
+                }
+            }
+        };
+        xhr.send(body);
+    }
+
+    loginInput.addEventListener("change", checkLogin);
+
+    var registrationForm = document.querySelector("#registrationForm");
+
+    registrationForm.addEventListener('submit', function (event) {
+        checkLogin(event);
+        if (registrationForm.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        registrationForm.classList.add('was-validated');
+    }, false);
+</script>
+</body>
+</html>
