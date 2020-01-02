@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AvtoSell - главная</title>
+    <title>AvtoSell - Новости</title>
     <!-- MDB icon -->
     <link rel="icon" href="" type="image/x-icon">
     <!-- Font Awesome -->
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/static/css/mdb.css">
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/paginationjs.css">
 </head>
 <body>
 
@@ -58,68 +59,47 @@
 </header>
 
 
-<main class="my-5">
+<main class="my-5" style="min-height: 80vh">
     <div class="container">
 
-        <section class="">
-            {{ range $val := .repeat }}
-                <!-- Grid row -->
-                <div class="row my-3">
+        <section class="" id="data-container">
+            {{/*            {{ range $val := .repeat }}*/}}
+{{/*            <div class="row my-3">*/}}
 
-                    <!-- Grid column -->
-                    <div class="col-lg-5 col-md-12 mb-lg-0 mb-4">
+{{/*                <div class="col-lg-5 col-md-12 mb-lg-0 mb-4">*/}}
 
-                        <!-- Featured image -->
-                        <div class="view overlay rounded z-depth-1 mb-lg-0 mb-4">
-                            <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/52.jpg"
-                                 alt="Sample image">
-                            <a href="/news/1">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
+{{/*                    <div class="view overlay rounded z-depth-1 mb-lg-0 mb-4">*/}}
+{{/*                        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/52.jpg"*/}}
+{{/*                             alt="Sample image">*/}}
+{{/*                        <a href="/news/1">*/}}
+{{/*                            <div class="mask rgba-white-slight"></div>*/}}
+{{/*                        </a>*/}}
+{{/*                    </div>*/}}
 
-                    </div>
-                    <!-- Grid column -->
+{{/*                </div>*/}}
 
-                    <!-- Grid column -->
-                    <div class="col-lg-7 col-md-6 mb-md-0 mb-4 mt-xl-4">
+{{/*                <div class="col-lg-7 col-md-6 mb-md-0 mb-4 mt-xl-4">*/}}
 
-                        <h3 class="font-weight-normal mb-4">Convert your visitors to real customers</h3>
-                        <p class="text-muted">Option as can distributors. And to suppliers, given a copy the horrible
-                            arrange yes, we had hundreds leave was more which a I the king's had the so soon throughout
-                            in
-                            necessary which at way did phase a young written, descriptions, late uninspired, to times
-                            owner
-                            themselves them. Get sported uninspired, the a box to an to but on been the succeed have
-                            couldn't set.</p>
-                        <a class="btn btn-outline-elegant mx-0" href="/news/1">открыть <i
-                                class="fas fa-arrow-right fs-9 ml-2"></i></a>
+{{/*                    <h3 class="font-weight-normal mb-4">Convert your visitors to real customers</h3>*/}}
+{{/*                    <p class="text-muted">Option as can distributors. And to suppliers, given a copy the horrible*/}}
+{{/*                        arrange yes, we had hundreds leave was more which a I the king's had the so soon throughout*/}}
+{{/*                        in*/}}
+{{/*                        necessary which at way did phase a young written, descriptions, late uninspired, to times*/}}
+{{/*                        owner*/}}
+{{/*                        themselves them. Get sported uninspired, the a box to an to but on been the succeed have*/}}
+{{/*                        couldn't set.</p>*/}}
+{{/*                    <a class="btn btn-outline-elegant mx-0" href="/news/1">открыть <i*/}}
+{{/*                                class="fas fa-arrow-right fs-9 ml-2"></i></a>*/}}
 
-                    </div>
-                    <!-- Grid column -->
+{{/*                </div>*/}}
 
-                </div>
-                <!-- Grid row -->
-            {{ end }}
+{{/*            </div>*/}}
+            {{/*            {{ end }}*/}}
 
         </section>
 
         <section class="row justify-content-center mt-5">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination pg-dark">
-                    <li class="page-item ">
-                        <a class="page-link" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link">1</a></li>
-                    <li class="page-item active">
-                        <a class="page-link">2 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="page-item"><a class="page-link">3</a></li>
-                    <li class="page-item ">
-                        <a class="page-link">Next</a>
-                    </li>
-                </ul>
-            </nav>
+            <div id="pagination-container"></div>
         </section>
 
     </div>
@@ -146,6 +126,59 @@
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="/static/js/mdb.js"></script>
 <!-- Your custom scripts (optional) -->
+<script type="text/javascript" src="/static/js/pagination.js"></script>
+
+<script type="text/javascript">
+    $('#pagination-container').pagination({
+        dataSource: function (done) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/news/all',
+                responseType: 'json',
+                success: function (response) {
+                    done(response);
+                }
+            });
+        },
+        pageSize: 10,
+        callback: function (data, pagination) {
+            var html = simpleTemplating(data);
+            $('#data-container').html(html);
+        }
+    });
+
+    function simpleTemplating(data) {
+        var html = '';
+        $.each(data, function (index, item) {
+            html += `            <div class="row my-3">
+
+                <div class="col-lg-5 col-md-12 mb-lg-0 mb-4">
+
+                    <div class="view overlay rounded z-depth-1 mb-lg-0 mb-4">
+                        <img class="img-fluid" src="/` + item.image + `"
+                             alt="Sample image">
+                        <a href="/news/` + item.id + `">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-7 col-md-6 mb-md-0 mb-4 mt-xl-4">
+
+                    <h3 class="font-weight-normal mb-4">` + item.title + `</h3>
+                    <p class="text-muted">` + item.mini_desc + `</p>
+                    <a class="btn btn-outline-elegant mx-0" href="/news/` + item.id + `">открыть <i
+                                class="fas fa-arrow-right fs-9 ml-2"></i></a>
+
+                </div>
+
+            </div>`;
+        });
+        return html;
+    }
+
+</script>
 
 </body>
 </html>

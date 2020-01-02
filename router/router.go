@@ -6,7 +6,10 @@ import (
 	"encoding/gob"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"io/ioutil"
+	"mime/multipart"
 	"net/http"
+	"os"
 )
 
 var connection *sql.DB
@@ -28,6 +31,7 @@ func Init(db *sql.DB) *mux.Router {
 
 	// Serve static files
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	router.PathPrefix("/upload-images/").Handler(http.StripPrefix("/upload-images/", http.FileServer(http.Dir("upload-images"))))
 
 	// Site routes
 	router.HandleFunc("/", index)
@@ -49,10 +53,15 @@ func Init(db *sql.DB) *mux.Router {
 	router.HandleFunc("/admin", admin)
 	router.HandleFunc("/admin/exit", adminExit)
 
+	router.HandleFunc("/admin/news/add", adminNewsAdd).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/news/{id:[0-9]+}/edit", adminNewsEdit).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/news/{id:[0-9]+}/delete", adminNewsDelete).Methods(http.MethodGet)
+
 	// Api functions
 	router.HandleFunc("/api/checkLogin", checkLogin).Methods(http.MethodPost)
 	router.HandleFunc("/api/checkEmail", checkEmail).Methods(http.MethodPost)
 	router.HandleFunc("/api/checkPhone", checkPhone).Methods(http.MethodPost)
+	router.HandleFunc("/api/news/all", ApiNewsAll)
 	return router
 }
 
@@ -68,4 +77,31 @@ func isAuthAdmin(session *sessions.Session) bool {
 		return true
 	}
 	return false
+}
+
+func UploadImages(file multipart.File) (string, error) {
+	tempFile, err := ioutil.TempFile("upload-images", "upload-*.png")
+	if err != nil {
+		return "", err
+	}
+	defer tempFile.Close()
+
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	_, err = tempFile.Write(fileBytes)
+	if err != nil {
+		return "", err
+	}
+	return tempFile.Name(), nil
+}
+
+func DeleteImages(src string) error {
+	err := os.Remove(src)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	return nil
 }
