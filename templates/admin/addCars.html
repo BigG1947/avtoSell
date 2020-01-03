@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>AvtoSell - Добавить новость</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/static/css/mdb.css">
+    <link rel="stylesheet" href="/static/css/nouislider.css">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+<header>
+    <nav class="mb-0 navbar navbar-expand-lg navbar-dark elegant-color">
+        <a class="navbar-brand" href="/">AvtoSell</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+                aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/catalog">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">Новости</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                         aria-labelledby="navbarDropdownMenuLink-333">
+                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                        <hr class="hr">
+                        <a class="dropdown-item" href="/login">Войти</a>
+                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main class="my-5 container" style="min-height: 100vh">
+    <form enctype="multipart/form-data" class="card p-4" method="post" action="">
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="input_model">Модель</label>
+                <input type="text" class="form-control" id="input_model" name="model" placeholder="Модель" required>
+            </div>
+            <div class="form-group col">
+                <label for="">Цена</label>
+                <input type="number" class="form-control" placeholder="Цена" min="0" id="input_price">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col form-group">
+                <label for="input_manufacturer">Производитель</label>
+                <select required class="custom-select" name="manufacturer" id="input_manufacturer">
+                    <option value="1">Man1</option>
+                    <option value="2">Man2</option>
+                    <option value="3">Man3</option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label for="input_year">Год</label>
+                <input type="number" value="2020" min="1885" required class="form-control" name="year" id="input_year">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col form-group">
+                <label for="input_color">Цвет</label>
+                <select required class="custom-select" name="color" id="input_color">
+                    <option value="1">Col1</option>
+                    <option value="2">Col2</option>
+                    <option value="3">Col3</option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label for="input_category">Категория</label>
+                <select class="form-control custom-select" required name="category" id="input_category">
+                    <option value="1">Cat1</option>
+                    <option value="2">Cat2</option>
+                    <option value="3">Cat3</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <div class="custom-file">
+                    <input type="file" name="images" required class="custom-file-input" id="customFile" lang="ru">
+                    <label class="custom-file-label" for="customFile">Главное</label>
+                </div>
+            </div>
+            <div class="form-group col">
+                <div class="custom-file">
+                    <input type="file" name="photos" multiple required class="custom-file-input" id="customFile" lang="ru">
+                    <label class="custom-file-label" for="customFile">Второстепенные</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="input_mini_description">Короткое описание</label>
+            <textarea id="input_mini_description" rows="5" class="form-control md-textarea" name="mini-desc"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea class="form-control" name="description" id="description" rows="10" placeholder="Описание"></textarea>
+        </div>
+
+        <div class="row justify-content-end">
+            <a href="javascript:history.back()" class="btn btn-outline-danger">отмена</a>
+            <button class="btn btn-outline-warning" type="reset">очистить</button>
+            <button class="btn btn-outline-success" type="submit">добавить</button>
+        </div>
+    </form>
+</main>
+
+
+<footer class="page-footer font-small elegant-color">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> Avtosell.com</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/static/js/popper.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/static/js/mdb.js"></script>
+<script type="text/javascript" src="/static/js/addons/datatables.min.js"></script>
+<!-- Your custom scripts (optional) -->
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({selector: '#description'});</script>
+</body>
+</html>

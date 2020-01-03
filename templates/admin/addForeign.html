@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AvtoSell - {{.news.Title}}</title>
+    <title>AvtoSell - Добавить новость</title>
     <!-- MDB icon -->
     <link rel="icon" href="" type="image/x-icon">
     <!-- Font Awesome -->
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <!-- Material Design Bootstrap -->
     <link rel="stylesheet" href="/static/css/mdb.css">
+    <link rel="stylesheet" href="/static/css/nouislider.css">
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
@@ -34,8 +35,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/catalog">Каталог</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/news">Новости</a><span class="sr-only">(current)</span>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">Новости</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto nav-flex-icons">
@@ -58,64 +59,21 @@
 </header>
 
 
-<main class="pt-5">
-    <div class="container">
+<main class="my-5 container" style="min-height: 100vh">
+    <form class="card p-4" method="post" action="">
+        <div class="form-group col">
+            <label for="input_name">Наименование</label>
+            <input type="text" class="form-control" id="input_name" name="name" placeholder="Наименование" required>
+        </div>
 
-        <!--Section: Post-->
-        <section>
-
-            <!--Grid row-->
-            <div class="row">
-
-                <!--Grid column-->
-                <div class="col-12">
-
-                    <!--Featured Image-->
-                    <div class="card mb-4 wow fadeIn">
-
-                        <img src="/{{.news.Image}}" class="img-fluid" alt="">
-
-                    </div>
-                    <!--/.Featured Image-->
-
-                    <!--Card-->
-                    <div class="card mb-4 wow fadeIn">
-
-                        <!--Card content-->
-                        <div class="card-body text-center">
-
-                            <p class="h5 my-4">{{.news.Title}}</p>
-
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
-
-                    <!--Card-->
-                    <div class="card mb-4 wow fadeIn">
-
-                        <!--Card content-->
-                        <div class="card-body">
-
-                        {{ .text }}
-
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
-
-                </div>
-                <!--Grid column-->
-
-
-            </div>
-            <!--Grid row-->
-
-        </section>
-        <!--Section: Post-->
-
-    </div>
+        <div class="row justify-content-end">
+            <a href="javascript:history.back()" class="btn btn-outline-danger">отмена</a>
+            <button class="btn btn-outline-warning" type="reset">очистить</button>
+            <button class="btn btn-outline-success" type="submit">добавить</button>
+        </div>
+    </form>
 </main>
+
 
 <footer class="page-footer font-small elegant-color">
 
@@ -136,14 +94,9 @@
 <script type="text/javascript" src="/static/js/bootstrap.js"></script>
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="/static/js/mdb.js"></script>
+<script type="text/javascript" src="/static/js/addons/datatables.min.js"></script>
 <!-- Your custom scripts (optional) -->
-
-<script>
-    new WOW().init();
-</script>
-
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({selector: '#description'});</script>
 </body>
 </html>
-
-
-

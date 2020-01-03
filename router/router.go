@@ -57,6 +57,20 @@ func Init(db *sql.DB) *mux.Router {
 	router.HandleFunc("/admin/news/{id:[0-9]+}/edit", adminNewsEdit).Methods(http.MethodGet, http.MethodPost)
 	router.HandleFunc("/admin/news/{id:[0-9]+}/delete", adminNewsDelete).Methods(http.MethodGet)
 
+	router.HandleFunc("/admin/cars/add", adminCarAdd).Methods(http.MethodGet, http.MethodPost)
+
+	router.HandleFunc("/admin/colors/add", adminColorsAdd).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/colors/{id:[0-9]+}/edit", adminColorsEdit).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/colors/{id:[0-9]+}/delete", adminColorsDelete).Methods(http.MethodGet)
+
+	router.HandleFunc("/admin/category/add", adminCategoryAdd).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/category/{id:[0-9]+}/edit", adminCategoryEdit).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/category/{id:[0-9]+}/delete", adminCategoryDelete).Methods(http.MethodGet)
+
+	router.HandleFunc("/admin/manufacturer/add", adminManufacturerAdd).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/manufacturer/{id:[0-9]+}/edit", adminManufacturerEdit).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/manufacturer/{id:[0-9]+}/delete", adminManufacturerDelete).Methods(http.MethodGet)
+
 	// Api functions
 	router.HandleFunc("/api/checkLogin", checkLogin).Methods(http.MethodPost)
 	router.HandleFunc("/api/checkEmail", checkEmail).Methods(http.MethodPost)

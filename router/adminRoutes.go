@@ -26,9 +26,30 @@ func admin(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	var colors model.ColorList
+	if err := colors.GetAll(connection); err != nil {
+		log.Printf("Error in ColorList.GetAll() method: %s\n", err)
+		return
+	}
+
+	var manufacturer model.ManufacturerList
+	if err := manufacturer.GetAll(connection); err != nil {
+		log.Printf("Error in ManufacturerList.GetAll() method: %s\n", err)
+		return
+	}
+
+	var category model.CategoryList
+	if err := category.GetAll(connection); err != nil {
+		log.Printf("Error in CategoryList.GetAll() method: %s\n", err)
+		return
+	}
+
 	tmpl := template.Must(template.ParseFiles("templates/admin/index.html"))
 	err = tmpl.Execute(writer, map[string]interface{}{
-		"news": news,
+		"news":         news,
+		"colors":       colors,
+		"manufacturer": manufacturer,
+		"category":     category,
 	})
 	if err != nil {
 		log.Printf("Error in admin routes `admin`: %s\n", err)
@@ -260,4 +281,395 @@ func adminNewsDelete(writer http.ResponseWriter, request *http.Request) {
 
 	DeleteImages(news.Image)
 	http.Redirect(writer, request, "/admin", 302)
+}
+
+func adminCarAdd(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		var car model.Car
+
+		car.Model = request.FormValue("model")
+		car.MiniDesc = request.FormValue("mini-desc")
+		car.Description = request.FormValue("description")
+		if car.Year, err = strconv.Atoi(request.FormValue("year")); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		if car.Price, err = strconv.Atoi(request.FormValue("price")); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		if car.Manufacturer.Id, err = strconv.Atoi(request.FormValue("manufacturer")); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		if car.Color.Id, err = strconv.Atoi(request.FormValue("color")); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		if car.Category.Id, err = strconv.Atoi(request.FormValue("category")); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		err = request.ParseMultipartForm(22 << 20)
+		if err != nil {
+			http.Redirect(writer, request, "/500", 302)
+			log.Printf("%s\n", err)
+			return
+		}
+
+		file, header, err := request.FormFile("images")
+		if err != nil {
+			http.Redirect(writer, request, "/500", 302)
+			log.Printf("%s\n", err)
+			return
+		}
+		defer file.Close()
+		if (header.Header.Get("Content-Type") != "image/jpeg" && header.Header.Get("Content-Type") != "image/png") || (header.Size > 2<<20) {
+			log.Printf("AddProject: Неверный тип формата файла: %s\n", header.Header.Get("Content-Type"))
+			http.Redirect(writer, request, "/413", 302)
+			return
+		}
+
+		car.Images, err = UploadImages(file)
+		if err != nil {
+			http.Redirect(writer, request, "/500", 302)
+			log.Printf("%s\n", err)
+			return
+		}
+
+		photos := request.MultipartForm.File["photos"]
+
+		for i := range photos {
+			if (photos[i].Header.Get("Content-Type") != "image/jpeg" && photos[i].Header.Get("Content-Type") != "image/png") || photos[i].Size > 2<<20 {
+				continue
+			}
+
+			file, err := photos[i].Open()
+			if err != nil {
+				http.Redirect(writer, request, "/500", 302)
+				log.Printf("%s\n", err)
+				return
+			}
+
+			src, err := UploadImages(file)
+			if err != nil {
+				http.Redirect(writer, request, "/500", 302)
+				log.Printf("%s\n", err)
+				return
+			}
+
+			car.SecondImages = append(car.SecondImages, src)
+		}
+
+		if err := car.Add(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/addCars.html"))
+	if err := tmpl.Execute(writer, nil); err != nil {
+		log.Printf("%s\n", err)
+	}
+}
+
+func adminColorsAdd(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		var c model.Color
+		c.Name = request.FormValue("name")
+		if err := c.Add(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/addForeign.html"))
+	if err := tmpl.Execute(writer, nil); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminColorsEdit(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var c model.Color
+	if c.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := c.Get(connection, c.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		c.Name = request.FormValue("name")
+		if err := c.Edit(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/editForeign.html"))
+	if err := tmpl.Execute(writer, c); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminColorsDelete(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var c model.Color
+	if c.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := c.Get(connection, c.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if err := c.Delete(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	http.Redirect(writer, request, "/admin", 302)
+	return
+}
+
+func adminCategoryAdd(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		var c model.Category
+		c.Name = request.FormValue("name")
+		if err := c.Add(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/addForeign.html"))
+	if err := tmpl.Execute(writer, nil); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminCategoryEdit(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var c model.Category
+	if c.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := c.Get(connection, c.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		c.Name = request.FormValue("name")
+		if err := c.Edit(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/editForeign.html"))
+	if err := tmpl.Execute(writer, c); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminCategoryDelete(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var c model.Category
+	if c.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := c.Get(connection, c.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if err := c.Delete(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	http.Redirect(writer, request, "/admin", 302)
+	return
+}
+
+func adminManufacturerAdd(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		var m model.Manufacturer
+		m.Name = request.FormValue("name")
+		if err := m.Add(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/addForeign.html"))
+	if err := tmpl.Execute(writer, nil); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminManufacturerEdit(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var m model.Manufacturer
+	if m.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := m.Get(connection, m.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if request.Method == http.MethodPost {
+		m.Name = request.FormValue("name")
+		if err := m.Edit(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+
+		http.Redirect(writer, request, "/admin", 302)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("templates/admin/editForeign.html"))
+	if err := tmpl.Execute(writer, m); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}
+
+func adminManufacturerDelete(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error in getting session: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+	var m model.Manufacturer
+	if m.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err := m.Get(connection, m.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	if err := m.Delete(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	http.Redirect(writer, request, "/admin", 302)
+	return
 }
