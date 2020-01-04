@@ -1,3 +1,5 @@
+{{ $car := .car }}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,11 +66,11 @@
         <div class="form-row">
             <div class="form-group col">
                 <label for="input_model">Модель</label>
-                <input type="text" class="form-control" id="input_model" name="model" placeholder="Модель" required>
+                <input type="text" class="form-control" value="{{ .car.Model }}" id="input_model" name="model" placeholder="Модель" required>
             </div>
             <div class="form-group col">
                 <label for="">Цена</label>
-                <input type="number" class="form-control" name="price" placeholder="Цена" min="0" id="input_price">
+                <input type="number" value="{{ .car.Price }}" class="form-control" name="price" placeholder="Цена" min="0" id="input_price">
             </div>
         </div>
         <div class="form-row">
@@ -76,13 +78,13 @@
                 <label for="input_manufacturer">Производитель</label>
                 <select required class="custom-select" name="manufacturer" id="input_manufacturer">
                     {{ range .manufacturer }}
-                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        <option {{ if eq $car.Manufacturer.Id .Id }}selected{{ end }} value="{{ .Id }}">{{ .Name }}</option>
                     {{ end }}
                 </select>
             </div>
             <div class="col form-group">
                 <label for="input_year">Год</label>
-                <input type="number" value="2020" min="1885" required class="form-control" name="year" id="input_year">
+                <input type="number" value="{{ .car.Year }}" min="1885" required class="form-control" name="year" id="input_year">
             </div>
         </div>
         <div class="form-row">
@@ -90,7 +92,7 @@
                 <label for="input_color">Цвет</label>
                 <select required class="custom-select" name="color" id="input_color">
                     {{ range .colors }}
-                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        <option {{ if eq $car.Color.Id .Id }}selected{{ end }} value="{{ .Id }}">{{ .Name }}</option>
                     {{ end }}
                 </select>
             </div>
@@ -98,7 +100,7 @@
                 <label for="input_category">Категория</label>
                 <select class="form-control custom-select" required name="category" id="input_category">
                     {{ range .category }}
-                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        <option {{ if eq $car.Category.Id .Id }}selected{{ end }} value="{{ .Id }}">{{ .Name }}</option>
                     {{end}}
                 </select>
             </div>
@@ -106,7 +108,7 @@
         <div class="form-row">
             <div class="form-group col">
                 <div class="custom-file">
-                    <input type="file" name="images" required class="custom-file-input" id="customFile" lang="ru">
+                    <input type="file" name="images" class="custom-file-input" id="customFile" lang="ru">
                     <label class="custom-file-label" for="customFile">Главное</label>
                 </div>
             </div>
@@ -121,19 +123,19 @@
 
         <div class="form-group">
             <label for="input_mini_description">Короткое описание</label>
-            <textarea id="input_mini_description" rows="5" class="form-control md-textarea" name="mini-desc"></textarea>
+            <textarea id="input_mini_description" rows="5" class="form-control md-textarea" name="mini-desc">{{ .car.MiniDesc }}</textarea>
         </div>
 
         <div class="form-group">
             <label for="description">Описание</label>
             <textarea class="form-control" name="description" id="description" rows="10"
-                      placeholder="Описание"></textarea>
+                      placeholder="Описание">{{ .car.Description }}</textarea>
         </div>
 
         <div class="row justify-content-end">
             <a href="javascript:history.back()" class="btn btn-outline-danger">отмена</a>
             <button class="btn btn-outline-warning" type="reset">очистить</button>
-            <button class="btn btn-outline-success" type="submit">добавить</button>
+            <button class="btn btn-outline-success" type="submit">редактировать</button>
         </div>
     </form>
 </main>

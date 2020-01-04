@@ -185,13 +185,14 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {{ range .cars }}
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{ .Model }}</td>
+                            <td>{{ .Manufacturer.Name }}</td>
+                            <td>{{ .Year }}</td>
+                            <td>{{ .Category.Name }}</td>
+                            <td>{{ .Color.Name }}</td>
+                            <td>{{ .Price }}</td>
                             <td class="text-center"><a href="/product/{{.Id}}"><i
                                             class="fas fa-eye text-success"></i></a>
                             </td>
@@ -200,6 +201,7 @@
                             <td class="text-center"><a href="/admin/cars/{{.Id}}/delete"><i
                                             class="far fa-trash-alt text-danger"></i></a></td>
                         </tr>
+                        {{ end }}
                         </tbody>
                         <tfoot>
                         <tr>

@@ -58,6 +58,8 @@ func Init(db *sql.DB) *mux.Router {
 	router.HandleFunc("/admin/news/{id:[0-9]+}/delete", adminNewsDelete).Methods(http.MethodGet)
 
 	router.HandleFunc("/admin/cars/add", adminCarAdd).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/cars/{id:[0-9]+}/edit", adminCarEdit).Methods(http.MethodGet, http.MethodPost)
+	router.HandleFunc("/admin/cars/{id:[0-9]+}/delete", adminCarDelete).Methods(http.MethodGet, http.MethodPost)
 
 	router.HandleFunc("/admin/colors/add", adminColorsAdd).Methods(http.MethodGet, http.MethodPost)
 	router.HandleFunc("/admin/colors/{id:[0-9]+}/edit", adminColorsEdit).Methods(http.MethodGet, http.MethodPost)
