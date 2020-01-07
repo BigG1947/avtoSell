@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AvtoSell - главная</title>
+    <title>AvtoSell - {{ .car.Model }}</title>
     <!-- MDB icon -->
     <link rel="icon" href="" type="image/x-icon">
     <!-- Font Awesome -->
@@ -31,13 +31,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="order-form" class="form-inline">
-                    <div class="md-form">
-                        <input id="order-date-input" name="order-data" required type="date" list="order-date-list">
+                <form id="order-form" action="" method="post" class="form-inline">
+                    <div class="form-group">
+                        <input id="order-date-input" class="form-control" name="order-date" required type="date" list="order-date-list">
                         <label for="order-date-input">Дата</label>
                         <datalist id="order-date-list">
                         </datalist>
                     </div>
+                    <input type="hidden" name="user" value="{{ .user.Id }}">
+                    <input type="hidden" name="car" value="{{ .car.Id }}">
                 </form>
             </div>
             <div class="modal-footer">
@@ -89,13 +91,13 @@
 </header>
 
 
-<main class="mt-5 pt-4">
+<main class="mt-5 pt-4" style="min-height: 100vh">
     <div class="container dark-grey-text mt-5">
 
         <div class="row wow fadeIn">
             <!--Grid column-->
             <div class="col-md-6 mb-4">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid"
+                <img src="/{{.car.Images}}" class="img-fluid"
                      alt="">
             </div>
             <!--Grid column-->
@@ -104,29 +106,23 @@
             <div class="col-md-6 mb-4">
                 <!--Content-->
                 <div class="p-4">
-                    <p class="lead font-weight-bold">Name</p>
+                    <p class="lead font-weight-bold">{{.car.Model}}</p>
                     <div class="mb-3">
-                        <a href="">
-                            <span class="badge elegant-color mr-1">Category 2</span>
-                        </a>
-                        <a href="">
-                            <span class="badge red mr-1">New</span>
+                        <a href="/catalog?category={{.car.Category.Id}}">
+                            <span class="badge elegant-color mr-1">{{.car.Category.Name}}</span>
                         </a>
                     </div>
 
                     <p class="lead">
-                        <span class="mr-1">$200</span>
+                        <span class="mr-1">{{.car.Price}}₴</span>
                     </p>
                     <p class="lead font-weight-bold">Описание</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia
-                        ipsa
-                        sint voluptatibus!
-                        Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
+                    <p>{{ .text }}</p>
                     <div class="d-flex justify-content-left">
 
-                        <button type="button" class="btn btn-outline-elegant btn-md my-0 p" data-toggle="modal"
+                        <button type="button" {{if not .isAuth }} disabled {{ end }} class="btn btn-outline-elegant btn-md my-0 p" data-toggle="modal"
                                 data-target="#basicExampleModal">
-                            забронировать смотр
+                            {{if .isAuth }}забронировать смотр{{ else }}Для бронирования смотра необходимо быть зарегестрированным{{end}}
                         </button>
                     </div>
                 </div>
@@ -137,35 +133,14 @@
 
         <hr>
 
-        <div class="row d-flex justify-content-center">
-            <!--Grid column-->
-            <div class="col-md-6 text-center">
-                <h4 class="my-4 h4">Дополнительная информация</h4>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta
-                    odit
-                    voluptates,
-                    quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
-            </div>
-            <!--Grid column-->
-        </div>
 
         <div class="row">
-
-            <div class="col-lg-4 col-md-12 mb-4">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid"
-                     alt="">
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid"
-                     alt="">
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid"
-                     alt="">
-            </div>
-
+            {{ range .car.SecondImages }}
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <img src="/{{.}}" class="img-fluid"
+                         alt="">
+                </div>
+            {{ end }}
         </div>
 
     </div>
@@ -203,13 +178,13 @@
 
     const localDayNames = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'субота'];
 
-    function fillOrderDateList(){
+    function fillOrderDateList() {
         let dateList = document.querySelector('#order-date-list');
         let tmpDate = new Date();
         let options = '';
-        for (let i = 0; i < 14; i++){
+        for (let i = 0; i < 14; i++) {
             if (tmpDate.getDay() !== 0) {
-                options += `<option label="${localDayNames[tmpDate.getDay()]}">${tmpDate.toISOString().substr(0,10)}</option>`;
+                options += `<option label="${localDayNames[tmpDate.getDay()]}">${tmpDate.toISOString().substr(0, 10)}</option>`;
             }
             tmpDate.setDate(tmpDate.getDate() + 1);
         }
@@ -217,18 +192,20 @@
     }
 
     maxDate.setDate(currentDate.getDate() + 14);
-    console.log(currentDate.toISOString().substr(0,10));
-    dateInput.setAttribute("min", currentDate.toISOString().substr(0,10));
-    dateInput.setAttribute("max", maxDate.toISOString().substr(0,10));
-    function noSunday(e){
-        var day = new Date( e.target.value ).getUTCDay();
+    console.log(currentDate.toISOString().substr(0, 10));
+    dateInput.setAttribute("min", currentDate.toISOString().substr(0, 10));
+    dateInput.setAttribute("max", maxDate.toISOString().substr(0, 10));
+
+    function noSunday(e) {
+        var day = new Date(e.target.value).getUTCDay();
         // Days in JS range from 0-6 where 0 is Sunday and 6 is Saturday
-        if( day === 0 ){
+        if (day === 0) {
             e.target.setCustomValidity('Воскресенье - выходной день. Выберите пожалуйста другой день!');
         } else {
             e.target.setCustomValidity('');
         }
     }
+
     dateInput.addEventListener('input', noSunday);
     fillOrderDateList();
 </script>

@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/static/css/nouislider.css">
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/paginationjs.css">
 </head>
 <body>
 
@@ -75,95 +76,74 @@
                 </div>
 
                 <div class="collapse d-lg-block m-auto ml-lg-4" id="collapseBar">
-                    <form action="">
+                    <form>
                         <div class="my-4">
                             <p class="font-weight-bold">Бренд:</p>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="brand" value="5" class="custom-control-input" id="brand5">
-                                <label class="custom-control-label" for="brand5">HONDA</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="brand" value="4" class="custom-control-input" id="brand4">
-                                <label class="custom-control-label" for="brand4">FERRARI</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="brand" value="3" class="custom-control-input" id="brand3">
-                                <label class="custom-control-label" for="brand3">MERCEDES</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="brand" value="2" class="custom-control-input" id="brand2">
-                                <label class="custom-control-label" for="brand2">TOYOTA</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="brand" value="1" class="custom-control-input" id="brand1">
-                                <label class="custom-control-label" for="brand1">BMW</label>
-                            </div>
+                            {{ range .manufacturer}}
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="brand" value="{{.Id}}" class="custom-control-input"
+                                           id="brand{{.Id}}">
+                                    <label class="custom-control-label" for="brand{{.Id}}">{{.Name}}</label>
+                                </div>
+                            {{ end }}
                         </div>
 
                         <div class="my-4">
                             <p class="font-weight-bold">Цвет:</p>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="color" value="5" class="custom-control-input" id="color5">
-                                <label class="custom-control-label" for="color5">Белый</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="color" value="4" class="custom-control-input" id="color4">
-                                <label class="custom-control-label" for="color4">Красный</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="color" value="3" class="custom-control-input" id="color3">
-                                <label class="custom-control-label" for="color3">Желтый</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="color" value="2" class="custom-control-input" id="color2">
-                                <label class="custom-control-label" for="color2">Черный</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="color" value="1" class="custom-control-input" id="color1">
-                                <label class="custom-control-label" for="color1">Бежевый</label>
-                            </div>
+                            {{ range .colors }}
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="color" value="{{.Id}}" class="custom-control-input"
+                                           id="color{{.Id}}">
+                                    <label class="custom-control-label" for="color{{.Id}}">{{.Name}}</label>
+                                </div>
+                            {{ end }}
                         </div>
 
                         <div class="my-4">
                             <p class="font-weight-bold">Год выпуска:</p>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="year" value="5" class="custom-control-input" id="year5">
-                                <label class="custom-control-label" for="year5">2017</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="year" value="4" class="custom-control-input" id="year4">
-                                <label class="custom-control-label" for="year4">2018</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="year" value="3" class="custom-control-input" id="year3">
-                                <label class="custom-control-label" for="year3">2019</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="year" value="2" class="custom-control-input" id="year2">
-                                <label class="custom-control-label" for="year2">2015</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="year" value="1" class="custom-control-input" id="year1">
-                                <label class="custom-control-label" for="year1">2013</label>
-                            </div>
+                            {{ range .years }}
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="year" value="{{.}}" class="custom-control-input"
+                                           id="year{{.}}">
+                                    <label class="custom-control-label" for="year{{.}}">{{.}}</label>
+                                </div>
+                            {{ end }}
+                        </div>
+
+                        <div class="my-4">
+                            <p class="font-weight-bold">Категории:</p>
+                            {{ range .category }}
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="category" value="{{.Id}}" class="custom-control-input"
+                                           id="category{{.Id}}">
+                                    <label class="custom-control-label" for="category{{.Id}}">{{.Name}}</label>
+                                </div>
+                            {{ end }}
                         </div>
 
                         <div class="my-4">
                             <p class="font-weight-bold">Цена:</p>
                             <div id="slider" class="my-3"></div>
                             <div class="md-form">
-                                <input type="number" class="form-control my-2" value="0" id="price-min" name="price-min" min="0">
+                                <input type="number" value="{{.minPrice}}" class="form-control my-2" id="price-min"
+                                       name="price-min"
+                                       min="{{.minPrice}}">
                                 <label for="price-min" class="label">От</label>
                             </div>
                             <div class="md-form">
-                                <input type="number" class="form-control my-2" value="100" id="price-max" name="price-max" max="100">
+                                <input type="number" value="{{.maxPrice}}" class="form-control my-2" id="price-max"
+                                       name="price-max" max="{{.maxPrice}}">
                                 <label for="price-max" class="label">До</label>
                             </div>
                         </div>
 
                         <div class="row my-3">
-                            <button class="btn btn-outline-elegant col-auto font-small" type="submit">применить</button>
-                            <button class="btn btn-outline-elegant col-auto font-small" type="reset">сбросить</button>
+                            <button class="btn btn-outline-elegant col-auto font-small" type="button"
+                                    onclick="filter();">применить
+                            </button>
+                            <button class="btn btn-outline-elegant col-auto font-small" type="reset"
+                                    onclick="resetfilter();">сбросить
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -171,76 +151,17 @@
 
 
             <section class="col-12 col-lg-9">
-                <!-- Grid row -->
-                <div class="row my-3">
-                    {{ range $val := .repeat }}
-                        <!-- Grid column -->
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <!-- Card -->
-                            <div class="card card-cascade wider card-ecommerce">
-                                <!-- Card image -->
-                                <div class="view view-cascade overlay">
-                                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/img (55).jpg"
-                                         class="card-img-top"
-                                         alt="sample photo">
-                                    <a href="/product/1">
-                                        <div class="mask rgba-white-slight"></div>
-                                    </a>
-                                </div>
-                                <!-- Card image -->
-                                <!-- Card content -->
-                                <div class="card-body card-body-cascade text-center pb-0">
-                                    <!-- Title -->
-                                    <h5 class="card-title">
-                                        <strong>
-                                            <a href="/product/1" class="text-dark">GoPro</a>
-                                        </strong>
-                                    </h5>
-                                    <!-- Description -->
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing minima
-                                        veniam
-                                        elit.</p>
-                                    <!-- Card footer -->
-                                    <div class="card-footer mt-4">
-                                        <p class="float-left font-weight-bold mb-1 pb-2">1439$</p>
-                                        <a class="float-right">
-                                            <span class="badge elegant-color mr-1">2017</span>
-                                        </a>
-                                        <a class="float-right">
-                                            <span class="badge elegant-color mr-1">BMW</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Card content -->
-                            </div>
-                            <!-- Card -->
-                        </div>
-                        <!-- Grid column -->
-                    {{ end }}
+                <div class="row my-3" id="data-container">
+
 
                 </div>
-                <!-- Grid row -->
 
             </section>
         </div>
 
 
         <section class="row justify-content-center mt-5">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination pg-dark">
-                    <li class="page-item ">
-                        <a class="page-link" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link">1</a></li>
-                    <li class="page-item active">
-                        <a class="page-link">2 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="page-item"><a class="page-link">3</a></li>
-                    <li class="page-item ">
-                        <a class="page-link">Next</a>
-                    </li>
-                </ul>
-            </nav>
+            <div id="pagination-container"></div>
         </section>
 
     </div>
@@ -257,7 +178,6 @@
 
 </footer>
 
-
 <!-- jQuery -->
 <script type="text/javascript" src="/static/js/jquery.js"></script>
 <!-- Bootstrap tooltips -->
@@ -272,11 +192,11 @@
     var slider = document.getElementById('slider');
 
     noUiSlider.create(slider, {
-        start: [20, 80],
+        start: [{{.minPrice}}, {{.maxPrice}}],
         connect: true,
         range: {
-            'min': 0,
-            'max': 100
+            'min': {{.minPrice}},
+            'max': {{.maxPrice}}
         },
         step: 1,
     });
@@ -304,6 +224,161 @@
             minPriceInputNumber.value = value;
         }
     });
+
+</script>
+
+<script type="text/javascript" src="/static/js/pagination.js"></script>
+
+<script type="text/javascript">
+    var car_list = [];
+    var brand = [
+        {{range .manufacturer}}
+        "{{.Id}}",
+        {{ end }}
+    ];
+    var color = [
+        {{range .colors}}
+        "{{.Id}}",
+        {{end}}
+    ];
+    var category = [
+        {{range .category}}
+        "{{.Id}}",
+        {{end}}
+    ];
+    var year = [
+        {{range .years}}
+        "{{.}}",
+        {{end}}
+    ];
+    var max_price = {{ .maxPrice }};
+    var min_price = {{ .minPrice }};
+    var x = new XMLHttpRequest();
+    x.open("GET", "/api/cars/all", false);
+    x.send(null);
+    if (x.response == null) {
+        var html = `<div class="row justify-content-center my-3"><h2 class="text-center">В данный момент каталог пуст</h2></div>`;
+        $('#data-container').html(html);
+    } else {
+        car_list = JSON.parse(x.response);
+        setupPagination(car_list);
+    }
+
+    function setupPagination(dataSource) {
+        $('#pagination-container').pagination({
+            dataSource: dataSource,
+            pageSize: 10,
+            callback: function (data, pagination) {
+                var html = simpleTemplating(data);
+                $('#data-container').html(html);
+            }
+        });
+    }
+
+    function filter() {
+        let form = $('form');
+        let filters = form.serializeArray();
+        let temp_cars_filter = [];
+        let brand_filters = [];
+        let color_filters = [];
+        let category_filters = [];
+        let year_filters = [];
+        let max_price_filters = {{ .maxPrice }};
+        let min_price_filters = {{ .minPrice }};
+        console.log(filters);
+        $.each(filters, function (index, item) {
+            switch (item.name) {
+                case "brand":
+                    brand_filters.push(item.value)
+                    break;
+                case "color":
+                    color_filters.push(item.value)
+                    break;
+                case "year":
+                    year_filters.push(item.value)
+                    break;
+                case "category":
+                    category_filters.push(item.value)
+                    break;
+                case "price-min":
+                    min_price_filters = item.value
+                    break;
+                case "price-max":
+                    max_price_filters = item.value
+                    break
+            }
+        });
+
+        if (brand_filters.length == 0) {
+            brand_filters = [...brand]
+        }
+        if (color_filters.length == 0) {
+            color_filters = [...color]
+        }
+        if (category_filters.length == 0) {
+            category_filters = [...category]
+        }
+        if (year_filters.length == 0) {
+            year_filters = [...year]
+        }
+
+        temp_cars_filter = car_list.filter(function (car) {
+            console.log(car)
+            return brand_filters.some(elem => elem == car.manufacturer.id)
+                && color_filters.some(elem => elem == car.color.id)
+                && year_filters.some(elem => elem == car.year)
+                && category_filters.some(elem => elem == car.category.id)
+                && max_price_filters >= car.price && min_price_filters <= car.price
+        });
+        clearPagination();
+        setupPagination(temp_cars_filter);
+    }
+
+    function resetfilter() {
+        setupPagination(car_list);
+    }
+
+    function clearPagination() {
+        $('#data-container').empty();
+    }
+
+    function simpleTemplating(data) {
+        var html = '';
+        $.each(data, function (index, item) {
+            html += `
+            <div class="col-md-6 col-lg-4 mb-4">
+
+            <div class="card card-cascade wider card-ecommerce">
+            <div class="view view-cascade overlay">
+            <img src="/` + item.images + `"
+            class="card-img-top"
+            alt="sample photo">
+            <a href="/product/` + item.id + `">
+            <div class="mask rgba-white-slight"></div>
+            </a>
+            </div>
+            <div class="card-body card-body-cascade text-center pb-0">
+            <h5 class="card-title">
+            <strong>
+            <a href="/product/` + item.id + `" class="text-dark">` + item.model + `</a>
+            </strong>
+            </h5>
+            <p class="card-text">` + item.mini_desc + `</p>
+            <div class="card-footer mt-4">
+            <p class="float-left font-weight-bold mb-1 pb-2">` + item.price + ` ₴</p>
+            <a class="float-right">
+            <span class="badge elegant-color mr-1">` + item.year + `</span>
+            </a>
+            <a class="float-right">
+            <span class="badge elegant-color mr-1">` + item.manufacturer.name + `</span>
+            </a>
+            </div>
+            </div>
+            </div>
+            </div>`
+        });
+        return html;
+    }
 
 </script>
 

@@ -53,8 +53,50 @@ func post(writer http.ResponseWriter, request *http.Request) {
 }
 
 func product(writer http.ResponseWriter, request *http.Request) {
+	var err error
+	session, err := sessionStore.Get(request, userSession)
+	if err != nil {
+		log.Printf("%s\n")
+		return
+	}
+
+	var c model.Car
+	if c.Id, err = strconv.Atoi(mux.Vars(request)["id"]); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	if err = c.Get(connection, c.Id); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+	var user *model.User
+	if isAuthUser(session) {
+		user = session.Values["user"].(*model.User)
+	} else {
+		user = new(model.User)
+	}
+
+	if request.Method == http.MethodPost {
+		var order model.Order
+		order.User.Id, _ = strconv.Atoi(request.FormValue("user"))
+		order.Car.Id, _ = strconv.Atoi(request.FormValue("car"))
+		order.Date = request.FormValue("order-date")
+		order.Status = 1
+		if err := order.Add(connection); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+		http.Redirect(writer, request, "/cabinet", 302)
+		return
+	}
+
 	tmpl := template.Must(template.ParseFiles("templates/product.html"))
-	err := tmpl.Execute(writer, nil)
+	err = tmpl.Execute(writer, map[string]interface{}{
+		"car":    c,
+		"text":   template.HTML(c.Description),
+		"isAuth": isAuthUser(session),
+		"user":   user,
+	})
 	if err != nil {
 		log.Printf("Error in site routes 'product': %s\n", err)
 	}
@@ -62,9 +104,41 @@ func product(writer http.ResponseWriter, request *http.Request) {
 }
 
 func catalog(writer http.ResponseWriter, request *http.Request) {
+	var ml model.ManufacturerList
+	if err := ml.GetAll(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	var cl model.ColorList
+	if err := cl.GetAll(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	var yl model.YearsList
+	if err := yl.Get(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	var ct model.CategoryList
+	if err := ct.GetAll(connection); err != nil {
+		log.Printf("%s\n", err)
+		return
+	}
+
+	var cars model.CarList
+	minPrice, _ := cars.GetMinPrice(connection)
+	maxPrice, _ := cars.GetMaxPrice(connection)
 	tmpl := template.Must(template.ParseFiles("templates/catalog.html"))
 	err := tmpl.Execute(writer, map[string]interface{}{
-		"repeat": []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
+		"manufacturer": ml,
+		"colors":       cl,
+		"years":        yl,
+		"category":     ct,
+		"minPrice":     minPrice,
+		"maxPrice":     maxPrice,
 	})
 	if err != nil {
 		log.Printf("Error in site routes 'catalog': %s\n", err)

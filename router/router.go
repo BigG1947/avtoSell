@@ -47,6 +47,11 @@ func Init(db *sql.DB) *mux.Router {
 	router.HandleFunc("/registration", signUp).Methods(http.MethodGet, http.MethodPost)
 	router.HandleFunc("/cabinet", cabinet)
 	router.HandleFunc("/cabinet/exit", exitUser)
+	router.HandleFunc("/cabinet/change/password", changePassword).Methods(http.MethodPost)
+	router.HandleFunc("/cabinet/change/phone", changePhone).Methods(http.MethodPost)
+	router.HandleFunc("/cabinet/change/fio", changeFio).Methods(http.MethodPost)
+	router.HandleFunc("/cabinet/change/email", changeEmail).Methods(http.MethodPost)
+	router.HandleFunc("/cabinet/order/{id:[0-9]+}/cancel", cancelOrder)
 
 	// Admin routes
 	router.HandleFunc("/admin/login", adminLogin).Methods(http.MethodGet, http.MethodPost)
@@ -73,14 +78,17 @@ func Init(db *sql.DB) *mux.Router {
 	router.HandleFunc("/admin/manufacturer/{id:[0-9]+}/edit", adminManufacturerEdit).Methods(http.MethodGet, http.MethodPost)
 	router.HandleFunc("/admin/manufacturer/{id:[0-9]+}/delete", adminManufacturerDelete).Methods(http.MethodGet)
 
+	router.HandleFunc("/admin/order/{id:[0-9]+}/cancel", cancelOrderAdmin)
+	router.HandleFunc("/admin/order/{id:[0-9]+}/check", checkOrderAdmin)
+
 	// Api functions
 	router.HandleFunc("/api/checkLogin", checkLogin).Methods(http.MethodPost)
 	router.HandleFunc("/api/checkEmail", checkEmail).Methods(http.MethodPost)
 	router.HandleFunc("/api/checkPhone", checkPhone).Methods(http.MethodPost)
 	router.HandleFunc("/api/news/all", ApiNewsAll)
+	router.HandleFunc("/api/cars/all", ApiCarsAll)
 	return router
 }
-
 func isAuthUser(session *sessions.Session) bool {
 	if _, ok := session.Values["user"]; ok {
 		return true

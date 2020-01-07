@@ -6,14 +6,14 @@ import (
 )
 
 type User struct {
-	Id           int64    `json:"id"`
-	Login        string   `json:"login"`
-	FirstName    string   `json:"first_name"`
-	LastName     string   `json:"last_name"`
+	Id           int    `json:"id"`
+	Login        string `json:"login"`
+	FirstName    string `json:"first_name"`
+	LastName     string `json:"last_name"`
 	PasswordHash []byte `json:"password"`
-	Email        string   `json:"email"`
-	Phone        string   `json:"phone"`
-	IsAdmin      bool     `json:"is_admin"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone"`
+	IsAdmin      bool   `json:"is_admin"`
 }
 
 type UserList []User
@@ -114,6 +114,34 @@ func (userList *UserList) GetAllUsers(db *sql.DB) error {
 			return err
 		}
 		*userList = append(*userList, u)
+	}
+	return nil
+}
+
+func (u *User) EditPassword(db *sql.DB) error {
+	if _, err := db.Exec("UPDATE user_list SET password = $1 WHERE id = $2", u.PasswordHash, u.Id); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *User) EditPhone(db *sql.DB) error {
+	if _, err := db.Exec("UPDATE user_list SET phone = $1 WHERE id = $2", u.Phone, u.Id); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *User) EditEmail(db *sql.DB) error {
+	if _, err := db.Exec("UPDATE user_list SET email = $1 WHERE id = $2", u.Email, u.Id); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *User) EditFio(db *sql.DB) error {
+	if _, err := db.Exec("UPDATE user_list SET last_name = $1, first_name = $2 WHERE id = $3", u.LastName, u.FirstName, u.Id); err != nil {
+		return err
 	}
 	return nil
 }

@@ -6,17 +6,17 @@ import (
 )
 
 type Car struct {
-	Id           int
-	Model        string
-	MiniDesc     string
-	Description  string
-	Category     Category
-	Color        Color
-	Manufacturer Manufacturer
-	Price        int
-	Images       string
-	SecondImages []string
-	Year         int
+	Id           int          `json:"id"`
+	Model        string       `json:"model"`
+	MiniDesc     string       `json:"mini_desc"`
+	Description  string       `json:"description"`
+	Category     Category     `json:"category"`
+	Color        Color        `json:"color"`
+	Manufacturer Manufacturer `json:"manufacturer"`
+	Price        int          `json:"price"`
+	Images       string       `json:"images"`
+	SecondImages []string     `json:"second_images"`
+	Year         int          `json:"year"`
 }
 
 type CarList []Car
@@ -88,6 +88,22 @@ func (cl *CarList) GetAll(db *sql.DB) error {
 		*cl = append(*cl, c)
 	}
 	return nil
+}
+
+func (cl *CarList) GetMinPrice(db *sql.DB) (int, error) {
+	var minPrice int
+	if err := db.QueryRow("SELECT min(price) FROM car_list").Scan(&minPrice); err != nil {
+		return 0, err
+	}
+	return minPrice, nil
+}
+
+func (cl *CarList) GetMaxPrice(db *sql.DB) (int, error) {
+	var maxPrice int
+	if err := db.QueryRow("SELECT MAX(price) FROM car_list").Scan(&maxPrice); err != nil {
+		return 0, err
+	}
+	return maxPrice, nil
 }
 
 func getSecondImagesJsonString(images []string) string {

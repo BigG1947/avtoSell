@@ -44,6 +44,15 @@ func admin(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	var cancelOrders model.OrderList
+	cancelOrders.GetUserCancelOrders(connection, 0)
+
+	var checkOrders model.OrderList
+	checkOrders.GetUserCheckOrders(connection, 0)
+
+	var newOrders model.OrderList
+	newOrders.GetUserNewOrders(connection, 0)
+
 	var cars model.CarList
 	if err := cars.GetAll(connection); err != nil {
 		log.Printf("Error in CarList.GetAll() method: %s\n", err)
@@ -57,6 +66,9 @@ func admin(writer http.ResponseWriter, request *http.Request) {
 		"manufacturer": manufacturer,
 		"category":     category,
 		"cars":         cars,
+		"newOrders":    newOrders,
+		"checkOrders":  checkOrders,
+		"cancelOrders": cancelOrders,
 	})
 	if err != nil {
 		log.Printf("Error in admin routes `admin`: %s\n", err)
@@ -886,6 +898,44 @@ func adminManufacturerDelete(writer http.ResponseWriter, request *http.Request) 
 		return
 	}
 
+	http.Redirect(writer, request, "/admin", 302)
+	return
+}
+
+func cancelOrderAdmin(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error with session in admin routes cancelOrderAdmin: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	var order model.Order
+
+	order.Id, _ = strconv.Atoi(mux.Vars(request)["id"])
+	order.Cancel(connection, 0)
+	http.Redirect(writer, request, "/admin", 302)
+	return
+}
+
+func checkOrderAdmin(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, adminSession)
+	if err != nil {
+		log.Printf("Error with session in admin routes cancelOrderAdmin: %s\n", err)
+		return
+	}
+	if !isAuthAdmin(session) {
+		http.Redirect(writer, request, "/admin/login", 302)
+		return
+	}
+
+	var order model.Order
+
+	order.Id, _ = strconv.Atoi(mux.Vars(request)["id"])
+	order.Check(connection, 0)
 	http.Redirect(writer, request, "/admin", 302)
 	return
 }

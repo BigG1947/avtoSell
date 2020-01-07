@@ -149,3 +149,22 @@ func ApiNewsAll(writer http.ResponseWriter, request *http.Request) {
 	}
 	return
 }
+
+func ApiCarsAll(writer http.ResponseWriter, request *http.Request) {
+	var cars model.CarList
+	if err := cars.GetAll(connection); err != nil {
+		log.Printf("Error in api cars all routers: %s\n", err)
+		return
+	}
+	writer.Header().Set("Content-Type", "application/json")
+	jsonResponse, err := json.Marshal(cars)
+	if err != nil {
+		log.Printf("Error in api cars all routers: %s\n", err)
+		return
+	}
+	writer.WriteHeader(200)
+	if _, err := writer.Write(jsonResponse); err != nil {
+		log.Printf("%s\n", err)
+	}
+	return
+}

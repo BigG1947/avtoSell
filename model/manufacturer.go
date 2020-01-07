@@ -3,8 +3,8 @@ package model
 import "database/sql"
 
 type Manufacturer struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type ManufacturerList []Manufacturer

@@ -17,7 +17,7 @@
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
-<body >
+<body>
 
 <header>
     <nav class="mb-0 navbar navbar-expand-lg navbar-dark elegant-color">
@@ -59,11 +59,197 @@
 </header>
 
 
-<main class="my-5" style="min-height: 100vh">
-    <div class="row justify-content-center align-content-center">
-        <h2 class="text-success text-center">Поздравляем, {{ .user.LastName }} {{ .user.FirstName }}, вы успешно вошли!</h2>
-        <h2 class="text-success text-center">{{ .user.PasswordHash }}</h2>
+<main class="my-5 container" style="min-height: 100vh">
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="row">
+                <div class="col-auto p-4 card" style="font-family: 'Helvetica Neue'; font-size: 1.1rem">
+                    <div class="m-1"><b>Фамилия:</b> <span id="last_name_info">{{.user.LastName}}</span></div>
+                    <div class="m-1"><b>Имя:</b> <span id="first_name_info">{{.user.FirstName}}</span></div>
+                    <div class="m-1"><b>Почта:</b> <span id="email_info">{{.user.Email}}</span></div>
+                    <div class="m-1"><b>Логин: </b>{{.user.Login}}</div>
+                    <div class="m-1"><b>Телефон: </b><span id="phone_info">{{.user.Phone}}</span></div>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-auto p-4 card" style="font-family: 'Helvetica Neue'; font-size: 1.1rem">
+                    <form id="password_form" action="/cabinet/change/password"
+                          method="post">
+                        <div class="alert alert-info d-none text-center" id="password_form_alert"></div>
+                        <div class="form-group">
+                            <label for="old_password">Текущий пароль</label>
+                            <input id="old_password" class="form-control" placeholder="Текущий пароль" type="password"
+                                   name="old_password">
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">Новый пароль</label>
+                            <input id="new_password" class="form-control" placeholder="Новый пароль" type="password"
+                                   name="new_password">
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password_check">Повторите новый пароль</label>
+                            <input id="new_password_check" class="form-control" placeholder="Повторите новый пароль"
+                                   type="password" name="new_password_check">
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-elegant">сменить пароль</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <div class="col-auto p-4 card" style="font-family: 'Helvetica Neue'; font-size: 1.1rem">
+
+                    <form action="/cabinet/change/email" id="email_form" method="post">
+                        <div class="form-group">
+                            <div class="alert alert-info d-none" id="email_form_alert"></div>
+                            <label for="old_password">Новый почтовый адрес</label>
+                            <input id="new_email" required class="form-control" placeholder="Новый почтовый адрес"
+                                   type="email"
+                                   name="new_email">
+                        </div>
+                        <button class="btn btn-sm btn-outline-elegant">сменить почту</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <div class="col-auto p-4 card" style="font-family: 'Helvetica Neue'; font-size: 1.1rem">
+
+                    <form id="change_phone_form" action="/cabinet/change/phone" method="post">
+                        <div class="form-group">
+                            <div class="alert alert-info d-none" id="chenge_phone_alert"></div>
+                            <label for="new_phone">Новый номер телефона</label>
+                            <input pattern="^((8|\+3)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$" id="new_phone" required class="form-control" placeholder="Новый номер телефона"
+                                   type="tel"
+                                   name="new_phone">
+                        </div>
+                        <button class="btn btn-sm btn-outline-elegant">сменить номер телефона</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <div class="col-auto p-4 card" style="font-family: 'Helvetica Neue'; font-size: 1.1rem">
+
+                    <form action="/cabinet/change/fio" id="fio_form" method="post">
+                        <div class="alert alert-info d-none" id="fio_form_alert"></div>
+                        <div class="form-group">
+                            <label for="new_last_name">Новая фамилия</label>
+                            <input id="new_last_name" required class="form-control" placeholder="Новая фамилия"
+                                   type="text"
+                                   name="new_last_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="new_first_name">Новое имя</label>
+                            <input id="new_first_name" required class="form-control" placeholder="Новое имя" type="text"
+                                   name="new_first_name">
+                        </div>
+                        <button class="btn btn-sm btn-outline-elegant">сменить Фамилию и Имя</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                       aria-controls="home"
+                       aria-selected="true">Запланированные</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                       aria-controls="profile"
+                       aria-selected="false">В обработке</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                       aria-controls="contact"
+                       aria-selected="false">Отказ</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Автомобиль</th>
+                            <th scope="col">Изображение</th>
+                            <th scope="col">Дата</th>
+                            <th scope="col">Отменить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range .checkOrders }}
+                            <tr>
+                                <td>{{ .Id }}</td>
+                                <td><a href="/product/{{ .Car.Id }}">{{ .Car.Model }}</a></td>
+                                <td><a href="/product/{{ .Car.Id }}"><img src="/{{.Car.Images}}" style="width: 5rem;" class="img-fluid"
+                                                                          alt=""></a></td>
+                                <td>{{.Date}}</td>
+                                <td><a href="/cabinet/order/{{.Id}}/cancel" class="btn btn-sm btn-outline-danger">отменить</a>
+                                </td>
+                            </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Автомобиль</th>
+                            <th scope="col">Изображение</th>
+                            <th scope="col">Дата</th>
+                            <th scope="col">Отменить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range .newOrders }}
+                            <tr>
+                                <td>{{ .Id }}</td>
+                                <td><a href="/product/{{ .Car.Id }}">{{ .Car.Model }}</a></td>
+                                <td><a href="/product/{{ .Car.Id }}"><img src="/{{.Car.Images}}" style="width: 5rem;"
+                                                                          alt=""></a></td>
+                                <td>{{.Date}}</td>
+                                <td><a href="/cabinet/order/{{.Id}}/cancel" class="btn btn-sm btn-outline-danger">отменить</a>
+                                </td>
+                            </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Автомобиль</th>
+                            <th scope="col">Изображение</th>
+                            <th scope="col">Дата</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range .cancelOrders }}
+                            <tr>
+                                <td>{{ .Id }}</td>
+                                <td><a href="/product/{{ .Car.Id }}">{{ .Car.Model }}</a></td>
+                                <td><a href="/product/{{ .Car.Id }}"><img src="/{{.Car.Images}}" style="width: 5rem;" class="img-fluid"
+                                                                          alt=""></a></td>
+                                <td>{{.Date}}</td>
+                            </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
 </main>
 
 
@@ -88,5 +274,159 @@
 <script type="text/javascript" src="/static/js/mdb.js"></script>
 <!-- Your custom scripts (optional) -->
 <script type="text/javascript" src="/static/js/range-sliders/nouislider.js"></script>
+<script>
+    var passwordForm = document.querySelector("#password_form");
+    passwordForm.onsubmit = changePassword;
+    var phoneForm = document.querySelector("#change_phone_form");
+    phoneForm.onsubmit = changePhone;
+    var emailForm = document.querySelector("#email_form");
+    emailForm.onsubmit = changeEmail;
+    var fioForm = document.querySelector("#fio_form");
+    fioForm.onsubmit = changeFio;
+
+
+    function changeFio(event){
+        event.preventDefault();
+        let change_fio_alert = document.querySelector("#fio_form_alert");
+        change_fio_alert.innerHTML = '';
+        change_fio_alert.classList.add("d-none");
+        let new_first_name = fioForm.elements.new_first_name.value;
+        let new_last_name = fioForm.elements.new_last_name.value;
+        let first_name_info = document.querySelector("#first_name_info");
+        let last_name_info = document.querySelector("#last_name_info");
+        let x = new XMLHttpRequest();
+
+        let body = 'new_last_name=' + encodeURIComponent(new_last_name) + "&new_first_name=" + new_first_name;
+        x.open("POST", '/cabinet/change/fio', true);
+        x.responseType = "json";
+        x.onload = function () {
+            console.log(x.response);
+            if (!x.response.ok) {
+                change_fio_alert.innerHTML = "Возникла ошибка, попробуйте позже!";
+                change_fio_alert.classList.remove("d-none");
+                return false;
+            } else {
+                last_name_info.innerHTML = new_last_name;
+                first_name_info.innerHTML = new_first_name;
+                change_fio_alert.innerHTML = "Информация успешно обновлена!";
+                change_fio_alert.classList.remove("d-none");
+                fioForm.elements.new_last_name.value = '';
+                fioForm.elements.new_first_name.value = '';
+                return false;
+            }
+        };
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        x.send(body);
+        return false;
+
+    }
+
+    function changeEmail(event){
+        event.preventDefault();
+        let email_info = document.querySelector("#email_info");
+        let change_email_alert = document.querySelector("#email_form_alert");
+        change_email_alert.innerHTML = '';
+        change_email_alert.classList.add("d-none");
+        let new_email = emailForm.elements.new_email.value;
+        let x = new XMLHttpRequest();
+
+        let body = 'new_email=' + encodeURIComponent(new_email);
+        x.open("POST", '/cabinet/change/email', true);
+        x.responseType = "json";
+        x.onload = function () {
+            console.log(x.response);
+            if (!x.response.ok) {
+                change_email_alert.innerHTML = "Возникла ошибка, попробуйте позже!";
+                change_email_alert.classList.remove("d-none");
+                return false;
+            } else {
+                email_info.innerHTML = new_email;
+                change_email_alert.innerHTML = "Почта успешно изменена!";
+                change_email_alert.classList.remove("d-none");
+                emailForm.elements.new_phone.value = '';
+                return false;
+            }
+        };
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        x.send(body);
+        return false;
+    }
+
+    function changePhone(event){
+        event.preventDefault();
+        let phone_info = document.querySelector("#phone_info");
+        let chenge_phone_alert = document.querySelector("#chenge_phone_alert");
+        chenge_phone_alert.innerHTML = '';
+        chenge_phone_alert.classList.add("d-none");
+        let new_phone = phoneForm.elements.new_phone.value;
+        let x = new XMLHttpRequest();
+
+        let body = 'new_phone=' + encodeURIComponent(new_phone);
+        x.open("POST", '/cabinet/change/phone', true);
+        x.responseType = "json";
+        x.onload = function () {
+            console.log(x.response);
+            if (!x.response.ok) {
+                chenge_phone_alert.innerHTML = "Возникла ошибка, попробуйте позже!";
+                chenge_phone_alert.classList.remove("d-none");
+                return false;
+            } else {
+                phone_info.innerHTML = new_phone;
+                chenge_phone_alert.innerHTML = "Телефон успешно изменен";
+                chenge_phone_alert.classList.remove("d-none");
+                phoneForm.elements.new_phone.value = '';
+                return false;
+            }
+        };
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        x.send(body);
+        return false;
+    }
+
+    function changePassword(event) {
+        event.preventDefault();
+        let old_password = passwordForm.elements.old_password.value;
+        let new_password = passwordForm.elements.new_password.value;
+        let new_password_check = passwordForm.elements.new_password_check.value;
+        let password_form_alert = document.querySelector('#password_form_alert');
+        password_form_alert.innerHTML = '';
+        password_form_alert.classList.add("d-none");
+        if (new_password.length < 4 || new_password_check.length < 4 || old_password.length < 4) {
+            password_form_alert.innerHTML = "Пароль должен быть больше 4 символов!";
+            password_form_alert.classList.remove("d-none");
+            return false;
+        }
+        if (new_password !== new_password_check) {
+            password_form_alert.innerHTML = "Пароли не совпадают!";
+            password_form_alert.classList.remove("d-none");
+            return false;
+        }
+
+        let x = new XMLHttpRequest();
+
+        let body = 'new_password=' + encodeURIComponent(new_password) +
+            '&old_password=' + encodeURIComponent(old_password);
+        x.open("POST", '/cabinet/change/password', true);
+        x.responseType = "json";
+        x.onload = function () {
+            console.log(x.response);
+            if (!x.response.ok) {
+                password_form_alert.innerHTML = "Неверный пароль";
+                password_form_alert.classList.remove("d-none");
+                return false;
+            } else {
+                password_form_alert.innerHTML = "Пароль успешно изменен";
+                password_form_alert.classList.remove("d-none");
+                passwordForm.elements.old_password.value = '';
+                passwordForm.elements.new_password.value = '';
+                passwordForm.elements.new_password_check.value = '';
+                return false;
+            }
+        };
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        x.send(body);
+        return false;
+    }
+</script>
 </body>
 </html>

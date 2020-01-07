@@ -3,8 +3,8 @@ package model
 import "database/sql"
 
 type Category struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type CategoryList []Category
