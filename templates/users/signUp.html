@@ -97,7 +97,7 @@
 
         <!-- Phone number -->
         <div>
-            <input type="text" required id="phoneInput" name="phone" class="form-control" placeholder="Номер телефона"
+            <input type="tel" pattern="^((8|\+3)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$" required id="phoneInput" name="phone" class="form-control" placeholder="Номер телефона"
                    aria-describedby="defaultRegisterFormPhoneHelpBlock">
             <div class="invalid-feedback">Данный телефон уже используется</div>
         </div>

@@ -48,10 +48,17 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-default"
                          aria-labelledby="navbarDropdownMenuLink-333">
-                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
-                        <hr class="hr">
-                        <a class="dropdown-item" href="/login">Войти</a>
-                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                        {{ if .isAuth }}
+                            <p class="text-center">{{ .user.LastName }} {{ .user.FirstName }}</p>
+                            <hr class="hr">
+                            <a href="/cabinet/exit" class="btn btn-sm btn-outline-danger">выйти</a>
+
+                        {{ else }}
+                            <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                            <hr class="hr">
+                            <a class="dropdown-item" href="/login">Войти</a>
+                            <a class="dropdown-item" href="/registration">Регистрация</a>
+                        {{ end }}
                     </div>
                 </li>
             </ul>

@@ -47,10 +47,17 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-default"
                          aria-labelledby="navbarDropdownMenuLink-333">
-                        <p class="px-2 text-left font-small">Стань членом клуба!</p>
-                        <hr class="hr">
-                        <a class="dropdown-item" href="/login">Войти</a>
-                        <a class="dropdown-item" href="/registration">Регистрация</a>
+                        {{ if .isAuth }}
+                            <p class="text-center">{{ .user.LastName }} {{ .user.FirstName }}</p>
+                            <hr class="hr">
+                            <a href="/cabinet/exit" class="btn btn-sm btn-outline-danger">выйти</a>
+
+                        {{ else }}
+                            <p class="px-2 text-left font-small">Стань членом клуба!</p>
+                            <hr class="hr">
+                            <a class="dropdown-item" href="/login">Войти</a>
+                            <a class="dropdown-item" href="/registration">Регистрация</a>
+                        {{ end }}
                     </div>
                 </li>
             </ul>
@@ -72,6 +79,8 @@
             <!-- Grid row -->
             <div class="row">
 
+                {{ range .news_list }}
+
                 <!-- Grid column -->
                 <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
 
@@ -79,21 +88,19 @@
                     <div class="card hoverable">
 
                         <!-- Card image -->
-                        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/58.jpg"
+                        <img class="card-img-top" src="/{{.Image}}"
                              alt="Card image cap">
 
                         <!-- Card content -->
                         <div class="card-body">
 
                             <!-- Title -->
-                            <a href="#!" class="black-text">We relocated to a new garage</a>
+                            <a href="/news/{{.Id}}" class="black-text">{{.Title}}</a>
                             <!-- Text -->
-                            <p class="card-title text-muted font-small mt-3 mb-2">Some quick example text to build on
-                                the card title and make up the bulk of the card's content. Some quick example text to
-                                build on the card title.</p>
+                            <p class="card-title text-muted font-small mt-3 mb-2">{{ .MiniDesc}}</p>
 
-                            <button type="button" class="btn btn-outline-elegant text-primary p-1 mx-0">Открыть<i
-                                    class="fa fa-angle-right ml-2"></i></button>
+                            <a type="button" href="/news/{{.Id}}" class="btn btn-outline-elegant text-primary p-1 mx-0">Открыть<i
+                                    class="fa fa-angle-right ml-2"></i></a>
 
                         </div>
 
@@ -103,67 +110,7 @@
                 </div>
                 <!-- Grid column -->
 
-                <!-- Grid column -->
-                <div class="col-lg-4 col-md-6 mb-md-0 mb-4">
-
-                    <!-- Card -->
-                    <div class="card hoverable">
-
-                        <!-- Card image -->
-                        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/project4.jpg"
-                             alt="Card image cap">
-
-                        <!-- Card content -->
-                        <div class="card-body">
-
-                            <!-- Title -->
-                            <a href="#!" class="black-text">Top 5 content marketing strategies</a>
-                            <!-- Text -->
-                            <p class="card-title text-muted font-small mt-3 mb-2">Some quick example text to build on
-                                the card title and make up the bulk of the card's content. Some quick example text to
-                                build on the card title.</p>
-
-                            <button type="button" class="btn btn-outline-elegant text-primary p-1 mx-0">Открыть<i
-                                    class="fa fa-angle-right ml-2"></i></button>
-
-                        </div>
-
-                    </div>
-                    <!-- Card -->
-
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-lg-4 col-md-6 mb-0">
-
-                    <!-- Card -->
-                    <div class="card hoverable">
-
-                        <!-- Card image -->
-                        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/88.jpg"
-                             alt="Card image cap">
-
-                        <!-- Card content -->
-                        <div class="card-body">
-
-                            <!-- Title -->
-                            <a href="#!" class="black-text">Best practices for minimal design</a>
-                            <!-- Text -->
-                            <p class="card-title text-muted font-small mt-3 mb-2">Some quick example text to build on
-                                the card title and make up the bulk of the card's content. Some quick example text to
-                                build on the card title.</p>
-
-                            <button type="button" class="btn btn-outline-elegant text-primary p-1 mx-0">Открыть<i
-                                    class="fa fa-angle-right ml-2"></i></button>
-
-                        </div>
-
-                    </div>
-                    <!-- Card -->
-
-                </div>
-                <!-- Grid column -->
+                {{ end }}
 
             </div>
             <!-- Grid row -->
@@ -185,17 +132,17 @@
 
             <!-- Grid row -->
             <div class="row">
-
+                {{ range .car_list }}
                 <!-- Grid column -->
                 <div class="col-lg-4 col-md-12 mb-4">
                     <!-- Card -->
                     <div class="card card-cascade wider card-ecommerce">
                         <!-- Card image -->
                         <div class="view view-cascade overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/img (55).jpg"
+                            <img src="/{{.Images}}"
                                  class="card-img-top"
                                  alt="sample photo">
-                            <a href="/product/1">
+                            <a href="/product/{{.Id}}">
                                 <div class="mask rgba-white-slight"></div>
                             </a>
                         </div>
@@ -205,21 +152,20 @@
                             <!-- Title -->
                             <h5 class="card-title">
                                 <strong>
-                                    <a href="/product/1" class="text-dark">GoPro</a>
+                                    <a href="/product/{{.Id}}" class="text-dark">{{.Model}}</a>
                                 </strong>
                             </h5>
                             <!-- Description -->
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing minima veniam
-                                elit.</p>
+                            <p class="card-text">{{.MiniDesc}}</p>
                             <!-- Card footer -->
                             <div class="card-footer mt-4">
-                                <p class="float-left font-weight-bold mb-1 pb-2">1439$</p>
+                                <p class="float-left font-weight-bold mb-1 pb-2">{{.Price}}₴</p>
                                 <a class="float-right">
-                                    <span class="badge elegant-color mr-1">2017</span>
+                                    <span class="badge elegant-color mr-1">{{.Year}}</span>
                                 </a>
                                 <a class="float-right"
                                    title="Quick Look">
-                                    <span class="badge elegant-color mr-1">BMW</span>
+                                    <span class="badge elegant-color mr-1">{{.Manufacturer.Name}}</span>
                                 </a>
                             </div>
                         </div>
@@ -228,94 +174,7 @@
                     <!-- Card -->
                 </div>
                 <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <!-- Card -->
-                    <div class="card card-cascade wider card-ecommerce">
-                        <!-- Card image -->
-                        <div class="view view-cascade overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/img%20(49).jpg"
-                                 class="card-img-top"
-                                 alt="sample photo">
-                            <a href="/product/1">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-                        <!-- Card image -->
-                        <!-- Card content -->
-                        <div class="card-body card-body-cascade text-center pb-0">
-                            <!-- Title -->
-                            <h5 class="card-title">
-                                <strong>
-                                    <a href="/product/1" class="text-dark">Camera</a>
-                                </strong>
-                            </h5>
-                            <!-- Description -->
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing minima veniam
-                                elit.</p>
-                            <!-- Card footer -->
-                            <div class="card-footer mt-4">
-                                <p class="float-left font-weight-bold mb-1 pb-2">1160$</p>
-                                <a class="float-right material-tooltip-main" data-toggle="tooltip" data-placement="top">
-                                    <span class="badge elegant-color mr-1">2017</span>
-                                </a>
-                                <a class="float-right material-tooltip-main" data-toggle="tooltip" data-placement="top">
-                                    <span class="badge elegant-color mr-1">BMW</span>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- Card content -->
-                    </div>
-                    <!-- Card -->
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <!-- Card -->
-                    <div class="card card-cascade wider card-ecommerce">
-                        <!-- Card image -->
-                        <div class="view view-cascade overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/img (56).jpg"
-                                 class="card-img-top"
-                                 alt="sample photo">
-                            <a href="/product/1">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-                        <!-- Card image -->
-                        <!-- Card content -->
-                        <div class="card-body card-body-cascade text-center pb-0">
-                            <!-- Title -->
-                            <h5 class="card-title">
-                                <strong>
-                                    <a href="/product/1" class="text-dark">iPhone 6S</a>
-                                </strong>
-                            </h5>
-                            <!-- Description -->
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores
-                                consequatur consequuntur debitis dolor ducimus error est ex libero magni modi molestiae
-                                quam repellendus rerum tenetur, velit veritatis, voluptatem. Eos, maxime?Lorem ipsum
-                                dolor sit amet, consectetur adipisicing minima veniam
-                                elit.</p>
-                            <!-- Card footer -->
-                            <div class="card-footer mt-4">
-                                <p class="float-left font-weight-bold mb-1 pb-2">2079$</p>
-                                <a class="float-right material-tooltip-main" data-toggle="tooltip" data-placement="top">
-                                    <span class="badge elegant-color mr-1">2017</span>
-                                </a>
-                                <a class="float-right material-tooltip-main" data-toggle="tooltip" data-placement="top">
-                                    <span class="badge elegant-color mr-1">BMW</span>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- Card content -->
-                    </div>
-                    <!-- Card -->
-                </div>
-                <!-- Grid column -->
-
+                {{ end }}
             </div>
             <!-- Grid row -->
 

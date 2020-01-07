@@ -59,3 +59,19 @@ func (nl *NewsList) GetAll(db *sql.DB) error {
 	}
 	return nil
 }
+
+func (nl *NewsList) GetLatest(db *sql.DB) error {
+	rows, err := db.Query("SELECT id, title, miniDesk, Description, Images FROM news_list ORDER BY id DESC LIMIT 3")
+	if err != nil {
+		return err
+	}
+
+	for rows.Next() {
+		var n News
+		if err := rows.Scan(&n.Id, &n.Title, &n.MiniDesc, &n.Description, &n.Image); err != nil {
+			return err
+		}
+		*nl = append(*nl, n)
+	}
+	return nil
+}

@@ -90,6 +90,24 @@ func (cl *CarList) GetAll(db *sql.DB) error {
 	return nil
 }
 
+func (cl *CarList) GetLatest(db *sql.DB) error {
+	rows, err := db.Query(
+		"SELECT car_list.id, car_list.model, car_list.category, category.name, car_list.color, colors.name, car_list.price, car_list.mini_desc, car_list.description, car_list.images, car_list.second_images, car_list.manufacturer, manufacturer.name, car_list.year FROM car_list, manufacturer, category, colors WHERE colors.id = car_list.color AND category.id = car_list.category AND manufacturer.id = car_list.manufacturer ORDER BY car_list.id DESC LIMIT 3")
+	if err != nil {
+		return err
+	}
+	for rows.Next() {
+		var c Car
+		var secondImages string
+		if err := rows.Scan(&c.Id, &c.Model, &c.Category.Id, &c.Category.Name, &c.Color.Id, &c.Color.Name, &c.Price, &c.MiniDesc, &c.Description, &c.Images, &secondImages, &c.Manufacturer.Id, &c.Manufacturer.Name, &c.Year); err != nil {
+			return err
+		}
+		c.SecondImages = getSecondImagesSliceOfString(secondImages)
+		*cl = append(*cl, c)
+	}
+	return nil
+}
+
 func (cl *CarList) GetMinPrice(db *sql.DB) (int, error) {
 	var minPrice int
 	if err := db.QueryRow("SELECT min(price) FROM car_list").Scan(&minPrice); err != nil {

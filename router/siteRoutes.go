@@ -10,8 +10,33 @@ import (
 )
 
 func index(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, userSession)
+	if err != nil {
+		log.Printf("Error with session in user routes cabinet: %s\n", err)
+		return
+	}
+	var user *model.User
+
+	if !isAuthUser(session) {
+		user = new(model.User)
+	} else {
+		user = session.Values["user"].(*model.User)
+		user.GetById(connection, user.Id)
+	}
+
+	var nl model.NewsList
+	nl.GetLatest(connection)
+
+	var cl model.CarList
+	cl.GetLatest(connection)
+
 	tmpl := template.Must(template.ParseFiles("templates/index.html"))
-	err := tmpl.Execute(writer, nil)
+	err = tmpl.Execute(writer, map[string]interface{}{
+		"news_list": nl,
+		"car_list":  cl,
+		"isAuth":    isAuthUser(session),
+		"user":      user,
+	})
 	if err != nil {
 		log.Printf("Error in site routes 'index': %s\n", err)
 	}
@@ -19,8 +44,25 @@ func index(writer http.ResponseWriter, request *http.Request) {
 }
 
 func news(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, userSession)
+	if err != nil {
+		log.Printf("Error with session in user routes cabinet: %s\n", err)
+		return
+	}
+	var user *model.User
+
+	if !isAuthUser(session) {
+		user = new(model.User)
+	} else {
+		user = session.Values["user"].(*model.User)
+		user.GetById(connection, user.Id)
+	}
+
 	tmpl := template.Must(template.ParseFiles("templates/news.html"))
-	err := tmpl.Execute(writer, map[string]interface{}{})
+	err = tmpl.Execute(writer, map[string]interface{}{
+		"isAuth": isAuthUser(session),
+		"user":   user,
+	})
 	if err != nil {
 		log.Printf("Error in site routes 'news': %s\n", err)
 	}
@@ -28,6 +70,20 @@ func news(writer http.ResponseWriter, request *http.Request) {
 }
 
 func post(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, userSession)
+	if err != nil {
+		log.Printf("Error with session in user routes cabinet: %s\n", err)
+		return
+	}
+	var user *model.User
+
+	if !isAuthUser(session) {
+		user = new(model.User)
+	} else {
+		user = session.Values["user"].(*model.User)
+		user.GetById(connection, user.Id)
+	}
+
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		log.Printf("%s\n", err)
@@ -43,8 +99,10 @@ func post(writer http.ResponseWriter, request *http.Request) {
 
 	tmpl := template.Must(template.ParseFiles("templates/post.html"))
 	err = tmpl.Execute(writer, map[string]interface{}{
-		"news": news,
-		"text": text,
+		"news":   news,
+		"text":   text,
+		"isAuth": isAuthUser(session),
+		"user":   user,
 	})
 	if err != nil {
 		log.Printf("Error in site routes 'post': %s\n", err)
@@ -104,6 +162,20 @@ func product(writer http.ResponseWriter, request *http.Request) {
 }
 
 func catalog(writer http.ResponseWriter, request *http.Request) {
+	session, err := sessionStore.Get(request, userSession)
+	if err != nil {
+		log.Printf("Error with session in user routes cabinet: %s\n", err)
+		return
+	}
+	var user *model.User
+
+	if !isAuthUser(session) {
+		user = new(model.User)
+	} else {
+		user = session.Values["user"].(*model.User)
+		user.GetById(connection, user.Id)
+	}
+
 	var ml model.ManufacturerList
 	if err := ml.GetAll(connection); err != nil {
 		log.Printf("%s\n", err)
@@ -132,13 +204,15 @@ func catalog(writer http.ResponseWriter, request *http.Request) {
 	minPrice, _ := cars.GetMinPrice(connection)
 	maxPrice, _ := cars.GetMaxPrice(connection)
 	tmpl := template.Must(template.ParseFiles("templates/catalog.html"))
-	err := tmpl.Execute(writer, map[string]interface{}{
+	err = tmpl.Execute(writer, map[string]interface{}{
 		"manufacturer": ml,
 		"colors":       cl,
 		"years":        yl,
 		"category":     ct,
 		"minPrice":     minPrice,
 		"maxPrice":     maxPrice,
+		"isAuth":       isAuthUser(session),
+		"user":         user,
 	})
 	if err != nil {
 		log.Printf("Error in site routes 'catalog': %s\n", err)
